@@ -218,3 +218,12 @@
 201	414	6914335243524771	C:/embedded/project/Debug/BrowseInfo/project_part4.pbi	6e651377c8ca1e5a
 421	610	6914335245475782	C:/embedded/project/Debug/BrowseInfo/project.pbd	ebc6f03a6d9b7041
 614	1473	6914335253629236	C:/embedded/project/Debug/BrowseInfo/project.pbw	5440ba1fb4ba7a0c
+27	151	6914834682163997	C:/embedded/project/Debug/BrowseInfo/CoreSupport/core_cm3.pbi	edbbae1b35d420b7
+24	334	6914834684012380	C:/embedded/project/Debug/BrowseInfo/Libraries/LCD/touch.pbi	4e2a5b7b2b908584
+30	349	6914834684160089	C:/embedded/project/Debug/BrowseInfo/Libraries/CMSIS/DeviceSupport/system_stm32f10x.pbi	dad5b0f6b16b9c0b
+4	361	6914834684266169	C:/embedded/project/Debug/BrowseInfo/Libraries/STM32F10x_StdPeriph_Driver_v3.5/src/misc.pbi	7425c2a52c81da7d
+153	486	6914834685529778	C:/embedded/project/Debug/BrowseInfo/Libraries/LCD/lcd.pbi	cbe9aea14b090735
+353	582	6914834686489067	C:/embedded/project/Debug/BrowseInfo/Libraries/STM32F10x_StdPeriph_Driver_v3.5/src/stm32f10x_can.pbi	c9143150bc8dd50e
+365	740	6914834688067125	C:/embedded/project/Debug/BrowseInfo/Libraries/STM32F10x_StdPeriph_Driver_v3.5/src/stm32f10x_cec.pbi	4875c0b6e80bba7e
+488	773	6914834688395912	C:/embedded/project/Debug/BrowseInfo/Libraries/STM32F10x_StdPeriph_Driver_v3.5/src/stm32f10x_adc.pbi	442d6455a2260c07
+337	780	6914834688405957	C:/embedded/project/Debug/BrowseInfo/Libraries/STM32F10x_StdPeriph_Driver_v3.5/src/stm32f10x_dac.pbi	910048c7d380d2f1
