@@ -1,0 +1,138 @@
+###############################################################################
+#
+# IAR ANSI C/C++ Compiler V9.30.1.335/W64 for ARM         29/Nov/2022  22:59:06
+# Copyright 1999-2022 IAR Systems AB.
+#
+#    Cpu mode          =  thumb
+#    Endian            =  little
+#    Source file       =  C:\embedded\project\user\pir.c
+#    Command line      =
+#        -f C:\embedded\project\Debug\Obj\user\pir.o.rsp
+#        (C:\embedded\project\user\pir.c -D USE_STDPERIPH_DRIVER -D
+#        STM32F10X_CL -lC C:\embedded\project\Debug\List\user -o
+#        C:\embedded\project\Debug\Obj\user --no_cse --no_unroll --no_inline
+#        --no_code_motion --no_tbaa --no_clustering --no_scheduling --debug
+#        --endian=little --cpu=Cortex-M3 -e --fpu=None --dlib_config
+#        "C:\Program Files\IAR Systems\Embedded Workbench
+#        9.1\arm\inc\c\DLib_Config_Normal.h" -I
+#        C:\embedded\project\Libraries\CMSIS\DeviceSupport\ -I
+#        C:\embedded\project\Libraries\CMSIS\DeviceSupport\Startup\ -I
+#        C:\embedded\project\Libraries\STM32F10x_StdPeriph_Driver_v3.5\inc\ -I
+#        C:\embedded\project\Libraries\STM32F10x_StdPeriph_Driver_v3.5\src\ -I
+#        C:\embedded\project\Libraries\LCD\ -I C:\embedded\project\user\ -I
+#        C:\embedded\project\user\inc\ -Ol -I "C:\Program Files\IAR
+#        Systems\Embedded Workbench 9.1\arm\CMSIS\Core\Include\\")
+#        --dependencies=n C:\embedded\project\Debug\Obj\user\pir.o.d
+#    Locale            =  C
+#    List file         =  C:\embedded\project\Debug\List\user\pir.lst
+#    Object file       =  C:\embedded\project\Debug\Obj\user\pir.o
+#    Runtime model:       
+#      __CPP_Runtime   =  1
+#      __SystemLibrary =  DLib
+#      __dlib_version  =  6
+#      __size_limit    =  32768|ARM.EW.LINKER
+#
+###############################################################################
+
+C:\embedded\project\user\pir.c
+      1          #include "pir.h"
+      2          #include "stm32f10x.h"
+      3          #include "stm32f10x_rcc.h"
+      4          #include "stm32f10x_gpio.h"
+      5          
+
+   \                                 In section .text, align 2, keep-with-next
+      6          void RCC_PIR(void)
+      7          {
+   \                     RCC_PIR: (+1)
+   \        0x0   0xB580             PUSH     {R7,LR}
+      8            // TODO: Enable the APB2 peripheral clock using the function 'RCC_APB2PeriphClockCmd'
+      9            RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOD,ENABLE);  // RCC GPIO D
+   \        0x2   0x2101             MOVS     R1,#+1
+   \        0x4   0x2020             MOVS     R0,#+32
+   \        0x6   0x.... 0x....      BL       RCC_APB2PeriphClockCmd
+     10            
+     11          }
+   \        0xA   0xBD01             POP      {R0,PC}
+     12          
+
+   \                                 In section .text, align 2, keep-with-next
+     13          void GPIO_PIR(void)
+     14          {
+   \                     GPIO_PIR: (+1)
+   \        0x0   0xB51C             PUSH     {R2-R4,LR}
+     15            GPIO_InitTypeDef GPIO_InitStructure;
+     16            // TODO: Initialize the GPIO pins using the structure 'GPIO_InitTypeDef' and the function 'GPIO_Init'
+     17            
+     18            // body detect input D1
+     19            GPIO_InitStructure.GPIO_Pin = PIR_PIN1;
+   \        0x2   0x2002             MOVS     R0,#+2
+   \        0x4   0xF8AD 0x0000      STRH     R0,[SP, #+0]
+     20            GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IPU;
+   \        0x8   0x2048             MOVS     R0,#+72
+   \        0xA   0xF88D 0x0003      STRB     R0,[SP, #+3]
+     21            GPIO_Init(PIR_PORT1, &GPIO_InitStructure);
+   \        0xE   0x....             LDR.N    R4,??DataTable1
+   \       0x10   0x4669             MOV      R1,SP
+   \       0x12   0x0020             MOVS     R0,R4
+   \       0x14   0x.... 0x....      BL       GPIO_Init
+     22            
+     23            GPIO_InitStructure.GPIO_Pin = PIR_PIN2;
+   \       0x18   0x2001             MOVS     R0,#+1
+   \       0x1A   0xF8AD 0x0000      STRH     R0,[SP, #+0]
+     24            GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IPU;
+   \       0x1E   0x2048             MOVS     R0,#+72
+   \       0x20   0xF88D 0x0003      STRB     R0,[SP, #+3]
+     25            GPIO_Init(PIR_PORT2, &GPIO_InitStructure);
+   \       0x24   0x4669             MOV      R1,SP
+   \       0x26   0x0020             MOVS     R0,R4
+   \       0x28   0x.... 0x....      BL       GPIO_Init
+     26          }
+   \       0x2C   0xBD13             POP      {R0,R1,R4,PC}
+     27          
+
+   \                                 In section .text, align 2, keep-with-next
+     28          void Init_PIR(void) {
+   \                     Init_PIR: (+1)
+   \        0x0   0xB580             PUSH     {R7,LR}
+     29              RCC_PIR();
+   \        0x2   0x.... 0x....      BL       RCC_PIR
+     30              GPIO_PIR();
+   \        0x6   0x.... 0x....      BL       GPIO_PIR
+     31          }
+   \        0xA   0xBD01             POP      {R0,PC}
+
+   \                                 In section .text, align 4, keep-with-next
+   \                     ??DataTable1:
+   \        0x0   0x4001'1400        DC32     0x40011400
+     32          
+
+   Maximum stack usage in bytes:
+
+   .cstack Function
+   ------- --------
+      16   GPIO_PIR
+        16   -> GPIO_Init
+       8   Init_PIR
+         8   -> GPIO_PIR
+         8   -> RCC_PIR
+       8   RCC_PIR
+         8   -> RCC_APB2PeriphClockCmd
+
+
+   Section sizes:
+
+   Bytes  Function/Label
+   -----  --------------
+       4  ??DataTable1
+      46  GPIO_PIR
+      12  Init_PIR
+      12  RCC_PIR
+
+ 
+ 74 bytes in section .text
+ 
+ 74 bytes of CODE memory
+
+Errors: none
+Warnings: none
