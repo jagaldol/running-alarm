@@ -1,7 +1,7 @@
 #include "stm32f10x.h"
 #include "stm32f10x_rcc.h"
 #include "stm32f10x_gpio.h"
-//use pe0, pe1, pe2, pe3
+//use pc2 ~ 5
 void RCC_Configure_wheel_pinE();//must do
 void GPIO_Configure_wheel();//must do
 void toFrontRightWheel();

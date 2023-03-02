@@ -3055,6 +3055,9 @@
             </file>
         </group>
         <file>
+            <name>$PROJ_DIR$\user\bluetooth.h</name>
+        </file>
+        <file>
             <name>$PROJ_DIR$\user\DS3231_BUZZER.c</name>
         </file>
         <file>
@@ -3077,6 +3080,12 @@
         </file>
         <file>
             <name>$PROJ_DIR$\user\stm32f10x_it.c</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\user\stop_button.c</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\user\stop_button.h</name>
         </file>
         <file>
             <name>$PROJ_DIR$\user\ultrasonic.c</name>

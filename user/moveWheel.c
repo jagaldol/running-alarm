@@ -12,58 +12,52 @@ void RCC_Configure_wheel_pinE(void)//must do
 void GPIO_Configure_wheel(void)//must do
 {
     GPIO_InitTypeDef GPIO_InitStructure;
-    GPIO_InitStructure.GPIO_Pin = GPIO_Pin_0;//Á¤¹æÇâ(¿ì)
+    GPIO_InitStructure.GPIO_Pin = GPIO_Pin_2;//Á¤¹æÇâ(¿ì)
     GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
     GPIO_InitStructure.GPIO_Speed =  GPIO_Speed_50MHz;
     GPIO_Init(GPIOE, &GPIO_InitStructure);
 
-    GPIO_InitStructure.GPIO_Pin = GPIO_Pin_1;//¿ª¹æÇâ(¿ì)
+    GPIO_InitStructure.GPIO_Pin = GPIO_Pin_3;//¿ª¹æÇâ(¿ì)
     GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
     GPIO_InitStructure.GPIO_Speed =  GPIO_Speed_50MHz;
     GPIO_Init(GPIOE, &GPIO_InitStructure);
 
-    GPIO_InitStructure.GPIO_Pin = GPIO_Pin_2;//Á¤¹æÇâ(ÁÂ)
+    GPIO_InitStructure.GPIO_Pin = GPIO_Pin_4;//Á¤¹æÇâ(ÁÂ)
     GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
     GPIO_InitStructure.GPIO_Speed =  GPIO_Speed_50MHz;
     GPIO_Init(GPIOE, &GPIO_InitStructure);
 
-    GPIO_InitStructure.GPIO_Pin = GPIO_Pin_3;//¿ª¹æÇâ(ÁÂ)
+    GPIO_InitStructure.GPIO_Pin = GPIO_Pin_5;//¿ª¹æÇâ(ÁÂ)
     GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
     GPIO_InitStructure.GPIO_Speed =  GPIO_Speed_50MHz;
     GPIO_Init(GPIOE, &GPIO_InitStructure);
-
-
-    GPIO_InitStructure.GPIO_Pin = GPIO_Pin_2;
-    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
-    GPIO_InitStructure.GPIO_Speed =  GPIO_Speed_50MHz;
-    GPIO_Init(GPIOD , &GPIO_InitStructure);
 }
 
 void toFrontRightWheel(){
-    GPIO_SetBits(GPIOE, GPIO_Pin_0);//PE0
-    GPIO_ResetBits(GPIOE, GPIO_Pin_1);//PE1
+    GPIO_SetBits(GPIOE, GPIO_Pin_2);//PE0
+    GPIO_ResetBits(GPIOE, GPIO_Pin_3);//PE1
 }
 
 void toFrontLeftWheel(){
-    GPIO_SetBits(GPIOE, GPIO_Pin_2);//PE2
-    GPIO_ResetBits(GPIOE, GPIO_Pin_3);//PE3
+    GPIO_SetBits(GPIOE, GPIO_Pin_4);//PE2
+    GPIO_ResetBits(GPIOE, GPIO_Pin_5);//PE3
 }
 
 void toBackRightWheel(){
-    GPIO_SetBits(GPIOE, GPIO_Pin_1);//¿À¸¥¹ÙÄû
-    GPIO_ResetBits(GPIOE, GPIO_Pin_0);
+    GPIO_SetBits(GPIOE, GPIO_Pin_3);//¿À¸¥¹ÙÄû
+    GPIO_ResetBits(GPIOE, GPIO_Pin_2);
 }
 
 void toBackLeftWheel(){
-    GPIO_SetBits(GPIOE, GPIO_Pin_3);//¿Þ¹ÙÄû
-    GPIO_ResetBits(GPIOE, GPIO_Pin_2);
+    GPIO_SetBits(GPIOE, GPIO_Pin_5);//¿Þ¹ÙÄû
+    GPIO_ResetBits(GPIOE, GPIO_Pin_4);
 }
 
 void stopAllWheel(){
-    GPIO_ResetBits(GPIOE, GPIO_Pin_0);
-    GPIO_ResetBits(GPIOE, GPIO_Pin_1);
     GPIO_ResetBits(GPIOE, GPIO_Pin_2);
     GPIO_ResetBits(GPIOE, GPIO_Pin_3);
+    GPIO_ResetBits(GPIOE, GPIO_Pin_4);
+    GPIO_ResetBits(GPIOE, GPIO_Pin_5);
 }
 //¿À¸¥¹ÙÄû : PE0, PE1 ... ¿Þ¹ÙÄû: PE2, PE3
 void setDirectionToFront(){
@@ -90,13 +84,13 @@ void turnToLeft(){
 
 void turnToRight90(){
   turnToRight();
-  delay(1000);//will be changed
+  delay(100);//will be changed
   setDirectionToFront();
 }
 
 void turnToLeft90(){
   turnToLeft();
-  delay(1000);
+  delay(100);
   setDirectionToFront();
 }
 

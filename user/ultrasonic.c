@@ -6,7 +6,6 @@
 
 
 /**
-*       made by jyp
  *   How to use this driver:
  *    1. Implement EnableHCSR04PeriphClock function and turn on clock for used peripherals
  *       ex:
@@ -34,6 +33,10 @@ void EnableHCSR04PeriphClock() {
     RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOA, ENABLE);
     RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOB, ENABLE);
     RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM3, ENABLE);
+    
+    //updata
+    RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM5, ENABLE);
+    RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM2, ENABLE);
   }
 
 /**
@@ -84,23 +87,136 @@ static void initMeasureTimer() {
    TIM_ClearFlag(US_TIMER, TIM_FLAG_Update);
 }
 
+//update
+static void initMeasureTimer2() {
+   RCC_ClocksTypeDef RCC_ClocksStatus;
+   RCC_GetClocksFreq(&RCC_ClocksStatus);
+   uint16_t prescaler = RCC_ClocksStatus.SYSCLK_Frequency / 1000000 - 1; //1 tick = 1us (1 tick = 0.165mm resolution)
+
+   TIM_DeInit(TIM5);
+   TIM_TimeBaseInitTypeDef TIM_TimeBaseInitStruct;
+   TIM_TimeBaseInitStruct.TIM_Prescaler = prescaler;
+   TIM_TimeBaseInitStruct.TIM_CounterMode = TIM_CounterMode_Up;
+   TIM_TimeBaseInitStruct.TIM_Period = 0xFFFF;
+   TIM_TimeBaseInitStruct.TIM_ClockDivision = TIM_CKD_DIV1;
+   TIM_TimeBaseInit(TIM5, &TIM_TimeBaseInitStruct);
+
+   TIM_OCInitTypeDef TIM_OCInitStruct;
+   TIM_OCStructInit(&TIM_OCInitStruct);
+   TIM_OCInitStruct.TIM_OCMode = TIM_OCMode_PWM1;
+   TIM_OCInitStruct.TIM_OutputState = TIM_OutputState_Enable;
+   TIM_OCInitStruct.TIM_Pulse = 15; //us
+   TIM_OCInitStruct.TIM_OCPolarity = TIM_OCPolarity_High;
+   TIM_OC3Init(TIM5, &TIM_OCInitStruct);
+
+   //input capture config
+   TIM_ICInitTypeDef TIM_ICInitStruct;
+   TIM_ICInitStruct.TIM_Channel = TIM_Channel_1;
+   TIM_ICInitStruct.TIM_ICPolarity = TIM_ICPolarity_Rising;
+   TIM_ICInitStruct.TIM_ICSelection = TIM_ICSelection_DirectTI;
+   TIM_ICInitStruct.TIM_ICPrescaler = TIM_ICPSC_DIV1;
+   TIM_ICInitStruct.TIM_ICFilter = 0;
+
+   TIM_PWMIConfig(TIM5, &TIM_ICInitStruct);
+   TIM_SelectInputTrigger(TIM5, inputTriger_updated);
+   TIM_SelectMasterSlaveMode(TIM5, TIM_MasterSlaveMode_Enable);
+
+   TIM_CtrlPWMOutputs(TIM5, ENABLE);
+
+   TIM_ClearFlag(TIM5, TIM_FLAG_Update);
+}
+
+//------------------------------ have to change below
+static void initMeasureTimer3() {
+   RCC_ClocksTypeDef RCC_ClocksStatus;
+   RCC_GetClocksFreq(&RCC_ClocksStatus);
+   uint16_t prescaler = RCC_ClocksStatus.SYSCLK_Frequency / 1000000 - 1; //1 tick = 1us (1 tick = 0.165mm resolution)
+
+   TIM_DeInit(TIM2);
+   TIM_TimeBaseInitTypeDef TIM_TimeBaseInitStruct;
+   TIM_TimeBaseInitStruct.TIM_Prescaler = prescaler;
+   TIM_TimeBaseInitStruct.TIM_CounterMode = TIM_CounterMode_Up;
+   TIM_TimeBaseInitStruct.TIM_Period = 0xFFFF;
+   TIM_TimeBaseInitStruct.TIM_ClockDivision = TIM_CKD_DIV1;
+   TIM_TimeBaseInit(TIM2, &TIM_TimeBaseInitStruct);
+
+   TIM_OCInitTypeDef TIM_OCInitStruct;
+   TIM_OCStructInit(&TIM_OCInitStruct);
+   TIM_OCInitStruct.TIM_OCMode = TIM_OCMode_PWM1;
+   TIM_OCInitStruct.TIM_OutputState = TIM_OutputState_Enable;
+   TIM_OCInitStruct.TIM_Pulse = 15; //us
+   TIM_OCInitStruct.TIM_OCPolarity = TIM_OCPolarity_High;
+   TIM_OC4Init(TIM2, &TIM_OCInitStruct);//using channel 4 (trig)
+
+      //input capture config
+   TIM_ICInitTypeDef TIM_ICInitStruct;
+   TIM_ICInitStruct.TIM_Channel = TIM_Channel_2;
+   TIM_ICInitStruct.TIM_ICPolarity = TIM_ICPolarity_Falling;
+   TIM_ICInitStruct.TIM_ICSelection = TIM_ICSelection_DirectTI;
+   TIM_ICInitStruct.TIM_ICPrescaler = TIM_ICPSC_DIV1;
+   TIM_ICInitStruct.TIM_ICFilter = 0;
+
+   TIM_PWMIConfig(TIM2, &TIM_ICInitStruct);
+   TIM_SelectInputTrigger(TIM2, TIM_TS_TI2FP2);
+   TIM_SelectMasterSlaveMode(TIM2, TIM_MasterSlaveMode_Enable);
+
+   TIM_CtrlPWMOutputs(TIM2, ENABLE);
+
+   TIM_ClearFlag(TIM2, TIM_FLAG_Update);
+}
+//end of update
+
 static void initPins() {
    GPIO_InitTypeDef GPIO_InitStructure;
+   
+      //update
+   GPIO_InitStructure.GPIO_Pin = US_TRIG_PIN2;
+   GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+   GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF_PP;
+   GPIO_Init(US_TRIG_PORT2, &GPIO_InitStructure);
+   
+   
+    GPIO_InitStructure.GPIO_Pin = US_ECHO_PIN2;
+   GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+   GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IN_FLOATING;
+   GPIO_Init(US_TRIG_PORT2, &GPIO_InitStructure);
+   //------------------------------ have to change below
+   GPIO_InitStructure.GPIO_Pin = US_TRIG_PIN3;
+   GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+   GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF_PP;
+   GPIO_Init(GPIOA, &GPIO_InitStructure);
+   
+   
+    GPIO_InitStructure.GPIO_Pin = US_ECHO_PIN3;
+   GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+   GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IN_FLOATING;
+   GPIO_Init(GPIOA, &GPIO_InitStructure);
+
+   
+   //
    GPIO_InitStructure.GPIO_Pin = US_TRIG_PIN;
    GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF_PP;
    GPIO_Init(US_TRIG_PORT, &GPIO_InitStructure);
-
-   GPIO_InitStructure.GPIO_Pin = US_ECHO_PIN;
+   
+   
+    GPIO_InitStructure.GPIO_Pin = US_ECHO_PIN;
    GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IN_FLOATING;
    GPIO_Init(US_ECHO_PORT, &GPIO_InitStructure);
+   
+
 }
 
 void InitHCSR04() {
    EnableHCSR04PeriphClock();
    initPins();
+      //update
+   initMeasureTimer2();
+   initMeasureTimer3();
+   //
    initMeasureTimer();
+   
 }
 
 int32_t HCSR04GetDistance() {
@@ -110,4 +226,29 @@ int32_t HCSR04GetDistance() {
    TIM_Cmd(US_TIMER, DISABLE);
    TIM_ClearFlag(US_TIMER, TIM_FLAG_Update);
    return (TIM_GetCapture2(US_TIMER)-TIM_GetCapture1(US_TIMER))*165/1000;
+}
+//update
+int32_t HCSR04GetDistance2() {
+   (TIM5)->CNT = 0;
+   TIM_Cmd(TIM5, ENABLE);
+   while(!TIM_GetFlagStatus(TIM5, TIM_FLAG_Update));
+   TIM_Cmd(TIM5, DISABLE);
+   TIM_ClearFlag(TIM5, TIM_FLAG_Update);
+   return (TIM_GetCapture2(TIM5)-TIM_GetCapture1(TIM5))*165/1000;
+}
+
+int cnt;
+//------------------have to change below
+int32_t HCSR04GetDistance3() {
+   (TIM2)->CNT = 0;
+   cnt++;
+   TIM_Cmd(TIM2, ENABLE);
+   while(!TIM_GetFlagStatus(TIM2, TIM_FLAG_CC2));
+   TIM_Cmd(TIM2, DISABLE);
+   TIM_ClearFlag(TIM2, TIM_FLAG_CC2);
+   return ((TIM_GetCapture2(TIM2))-(TIM_GetCapture1(TIM2)))*165/1000;
+}
+
+int delayByTim2(){
+  return cnt;
 }

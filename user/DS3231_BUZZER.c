@@ -656,6 +656,7 @@ void RCC_Configure_ds3231(void)
   RCC_APB2PeriphClockCmd(RCC_APB2Periph_AFIO, ENABLE);    // interrupt
   /* 2. Enable for button -> use PD11 for s1 user */
   RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOD,ENABLE);     // RCC GPIO D
+  RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOC,ENABLE);     // RCC GPIO D
 }
 
 void GPIO_Configure_ds3231(void)
@@ -668,16 +669,16 @@ void GPIO_Configure_ds3231(void)
   GPIO_Init(GPIOD, &GPIO_InitStructure); 
   
   /* Configure the PB7 or BUZZER pin */
-  GPIO_InitStructure.GPIO_Pin = GPIO_Pin_7;
+  GPIO_InitStructure.GPIO_Pin = GPIO_Pin_8;
   GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
   GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
-  GPIO_Init(GPIOB, &GPIO_InitStructure);
+  GPIO_Init(GPIOC, &GPIO_InitStructure);
 }
 
 void DS3231_Alarm_Init() {
   SystemInit();
-  RCC_Configure();
-  GPIO_Configure();
+  RCC_Configure_ds3231();
+  GPIO_Configure_ds3231();
 
   I2C_Configure();
   LCD_Init();
@@ -691,7 +692,7 @@ void alarm_check(ds3231_time *current_time, ds3231_Alarm1 *alarm1_data) {
         if (current_time->min >= alarm1_data->min) {
           if (current_time->sec >= alarm1_data->sec) {
             if (Alarm_flag == 0) { // 알람 작동시
-              GPIO_SetBits(GPIOB, GPIO_Pin_7); // 부저 작동
+              //GPIO_SetBits(GPIOB, GPIO_Pin_7); // 부저 작동
               
               Alarm_flag = 1;
               Alarm_ONOFF = 1;
@@ -699,7 +700,7 @@ void alarm_check(ds3231_time *current_time, ds3231_Alarm1 *alarm1_data) {
             }
             
             if (!GPIO_ReadInputDataBit(GPIOD, GPIO_Pin_11)) { // S1 버튼 누를시
-              GPIO_ResetBits(GPIOB, GPIO_Pin_7); // 부저 종료
+              //GPIO_ResetBits(GPIOB, GPIO_Pin_7); // 부저 종료
               printf("Alarm END");
               
               Alarm_ONOFF = 0;
