@@ -15,6 +15,14 @@
 - IAR Embedded Workbench IDE - Arm 9.30.1
 - 개발보드 : STM32F107VCT6
 
+## 사용 센서 및 모듈
+ - DS3231 RTC 고정밀 리얼타임 클럭 모듈 (SZH-EK047)
+ - 초음파 거리센서 모듈 (HC-SR04)
+ - 인체감지센서모듈 HC-SR501 (SZH-EK052)
+ - Bluetooth 모듈 (FB755AC)
+ - 알람 경보용 피에조 부저
+ - TFT-LCD
+
 ## 작동
 ### 알람 설정
 - 블루투스 통신을 통해 기기로 알람을 울리라는 신호를 발생시킨다.
